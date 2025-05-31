@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register as Barangay - BarangayNav</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-white: #ffffff;
+            --primary-gold: #f2c500;
+            --primary-red: #a60c0c;
+            --primary-blue: #0040e7;
+            --secondary-blue: #0056ff;
+            --dark-bg: #060e21;
+            --dark-secondary: #0f1729;
+            --dark-accent: #1a2332;
+            --text-white: #ffffff;
+            --text-light: #e2e8f0;
+            --text-gray: #94a3b8;
+            --text-muted: #64748b;
+            --glass-bg: rgba(15, 23, 41, 0.8);
+            --glass-border: rgba(0, 64, 231, 0.3);
+            --backdrop-blur: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-white);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .register-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-secondary));
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 64, 231, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .register-header .navbar-brand {
+            color: var(--text-white) !important;
+            font-weight: 800;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .register-header .navbar-brand:hover {
+            color: var(--primary-gold) !important;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-gold);
+            background: rgba(242, 197, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .register-container {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+        }
+
+        .register-card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 64, 231, 0.3);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            backdrop-filter: blur(var(--backdrop-blur));
+        }
+
+        .register-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--text-white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .register-hero h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0, 64, 231, 0.3);
+        }
+
+        .register-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .register-form {
+            padding: 3rem;
+            background: var(--dark-secondary);
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark-accent);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+            font-weight: 600;
+            position: relative;
+            border: 2px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--primary-blue);
+            color: var(--text-white);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 15px rgba(0, 64, 231, 0.5);
+        }
+
+        .step.completed {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            border-color: var(--primary-gold);
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 30px;
+            height: 2px;
+            background: var(--dark-accent);
+            transform: translateY(-50%);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step.completed::after {
+            background: var(--primary-gold);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--dark-accent);
+            color: var(--text-light);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(0, 64, 231, 0.25);
+            outline: none;
+            background: var(--dark-accent);
+            color: var(--text-white);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-select {
+            border: 2px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--dark-accent);
+            color: var(--text-light);
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(0, 64, 231, 0.25);
+            outline: none;
+            background: var(--dark-accent);
+            color: var(--text-white);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            color: var(--text-white);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 64, 231, 0.4);
+        }
+
+        .btn-outline-secondary {
+            border: 2px solid var(--text-gray);
+            color: var(--text-gray);
+            background: transparent;
+            border-radius: 10px;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--text-gray);
+            color: var(--dark-bg);
+            border-color: var(--text-gray);
+            transform: translateY(-2px);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--glass-border);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            background: var(--glass-bg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-blue);
+            background: rgba(0, 64, 231, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-blue);
+            background: rgba(0, 64, 231, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 1rem;
+        }
+
+        .file-item {
+            background: var(--dark-accent);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .file-icon {
+            color: var(--primary-blue);
+            margin-right: 0.5rem;
+        }
+
+        .file-name {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .file-remove {
+            color: var(--primary-red);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-remove:hover {
+            color: #dc3545;
+            transform: scale(1.1);
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-message h3 {
+            color: var(--text-white);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .alert-info {
+            background: rgba(0, 64, 231, 0.1);
+            border: 1px solid var(--primary-blue);
+            color: var(--text-light);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        /* Hero section features */
+        .register-hero .mt-4 div {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .register-hero .mt-4 div i {
+            margin-right: 0.5rem;
+            color: var(--primary-gold);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .register-hero {
+                padding: 2rem 1rem;
+            }
+
+            .register-hero h1 {
+                font-size: 2rem;
+            }
+
+            .register-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .step-indicator {
+                margin-bottom: 1.5rem;
+            }
+
+            .step {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .step::after {
+                width: 20px;
+            }
+        }
+
+        /* Scrollbar styling for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gold);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="register-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="../../index.html" class="navbar-brand">
+                    <i class="fas fa-map-marker-alt me-2"></i>BarangayNav
+                </a>
+                <a href="../../index.html" class="back-btn">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="register-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="register-card">
+                        <div class="row g-0">
+                            <!-- Hero Section -->
+                            <div class="col-lg-5">
+                                <div class="register-hero">
+                                    <h1>Mag-rehistro bilang Barangay</h1>
+                                    <p>Sumali sa aming transparent na plataporma para sa mas maayos na serbisyo sa inyong komunidad.</p>
+                                    
+                                    <div class="mt-4">
+                                        <div class="mb-3">
+                                            <i class="fas fa-shield-alt me-2"></i>
+                                            <span>Secure Registration</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <i class="fas fa-clock me-2"></i>
+                                            <span>Quick 5-minute Process</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            <span>Instant Verification</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Registration Form -->
+                            <div class="col-lg-7">
+                                <div class="register-form">
+                                    <!-- Step Indicator -->
+                                    <div class="step-indicator">
+                                        <div class="step active" data-step="1">1</div>
+                                        <div class="step" data-step="2">2</div>
+                                        <div class="step" data-step="3">3</div>
+                                        <div class="step" data-step="4">4</div>
+                                    </div>
+
+                                    <!-- Form Steps -->
+                                    <form id="registrationForm">
+                                        <!-- Step 1: Basic Information -->
+                                        <div class="form-step active" data-step="1">
+                                            <h3 class="mb-4 text-light">Basic Information</h3>
+                                            
+                                            <div class="form-group">
+                                                <label class="form-label">Pangalan ng Barangay</label>
+                                                <input type="text" class="form-control" name="barangay_name" placeholder="e.g., Barangay San Antonio" required>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Lungsod/Munisipalidad</label>
+                                                        <input type="text" class="form-control" name="city" placeholder="e.g., Quezon City" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Probinsya</label>
+                                                        <select class="form-select" name="province" required>
+                                                            <option value="">Pumili ng Probinsya</option>
+                                                            <option value="Metro Manila">Metro Manila</option>
+                                                            <option value="Cavite">Cavite</option>
+                                                            <option value="Laguna">Laguna</option>
+                                                            <option value="Batangas">Batangas</option>
+                                                            <option value="Rizal">Rizal</option>
+                                                            <option value="Bulacan">Bulacan</option>
+                                                            <!-- Add more provinces -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Zip Code</label>
+                                                <input type="text" class="form-control" name="zip_code" placeholder="e.g., 1100" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Bilang ng mga Residente</label>
+                                                <input type="number" class="form-control" name="population" placeholder="e.g., 5000" required>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                                    Susunod <i class="fas fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Step 2: Contact Information -->
+                                        <div class="form-step" data-step="2">
+                                            <h3 class="mb-4 text-light">Contact Information</h3>
+                                            
+                                            <div class="form-group">
+                                                <label class="form-label">Pangalan ng Barangay Captain</label>
+                                                <input type="text" class="form-control" name="captain_name" placeholder="e.g., Juan dela Cruz" required>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Email Address</label>
+                                                        <input type="email" class="form-control" name="email" placeholder="captain@barangay.gov.ph" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Phone Number</label>
+                                                        <input type="tel" class="form-control" name="phone" placeholder="+63 912 345 6789" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Address ng Barangay Hall</label>
+                                                <textarea class="form-control" name="address" rows="3" placeholder="Complete address ng Barangay Hall" required></textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Website (Optional)</label>
+                                                <input type="url" class="form-control" name="website" placeholder="https://barangayname.gov.ph">
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" class="btn btn-outline-secondary" onclick="prevStep()">
+                                                    <i class="fas fa-arrow-left me-2"></i>Bumalik
+                                                </button>
+                                                <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                                    Susunod <i class="fas fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Step 3: Document Upload -->
+                                        <div class="form-step" data-step="3">
+                                            <h3 class="mb-4 text-light">Upload Documents</h3>
+                                            <p class="text-muted mb-4">I-upload ang mga kinakailangang dokumento para sa verification</p>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Barangay Registration Certificate</label>
+                                                <div class="upload-area" onclick="document.getElementById('regCert').click()">
+                                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                                    <div class="upload-text">
+                                                        <strong>I-click dito para mag-upload</strong> o i-drag ang file dito
+                                                    </div>
+                                                    <small class="text-muted">PDF, JPG, PNG (Max 5MB)</small>
+                                                </div>
+                                                <input type="file" id="regCert" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload(this, 'regCertList')">
+                                                <div id="regCertList" class="file-list"></div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Captain's Valid ID</label>
+                                                <div class="upload-area" onclick="document.getElementById('captainId').click()">
+                                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                                    <div class="upload-text">
+                                                        <strong>I-click dito para mag-upload</strong> o i-drag ang file dito
+                                                    </div>
+                                                    <small class="text-muted">PDF, JPG, PNG (Max 5MB)</small>
+                                                </div>
+                                                <input type="file" id="captainId" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload(this, 'captainIdList')">
+                                                <div id="captainIdList" class="file-list"></div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Authorization Letter (Optional)</label>
+                                                <div class="upload-area" onclick="document.getElementById('authLetter').click()">
+                                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                                    <div class="upload-text">
+                                                        <strong>I-click dito para mag-upload</strong> o i-drag ang file dito
+                                                    </div>
+                                                    <small class="text-muted">PDF, JPG, PNG (Max 5MB)</small>
+                                                </div>
+                                                <input type="file" id="authLetter" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload(this, 'authLetterList')">
+                                                <div id="authLetterList" class="file-list"></div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <button type="button" class="btn btn-outline-secondary" onclick="prevStep()">
+                                                    <i class="fas fa-arrow-left me-2"></i>Bumalik
+                                                </button>
+                                                <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                                    I-submit <i class="fas fa-check ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Step 4: Success -->
+                                        <div class="form-step" data-step="4">
+                                            <div class="success-message">
+                                                <div class="text-center">
+                                                    <i class="fas fa-check-circle success-icon"></i>
+                                                    <h3>Registration Successful!</h3>
+                                                    <p class="mb-4">
+                                                        Salamat sa pag-register sa BarangayNav! Ang inyong application ay na-submit na at ire-review ng aming team sa loob ng 24-48 oras.
+                                                    </p>
+                                                    
+                                                    <div class="alert alert-info">
+                                                        <i class="fas fa-info-circle me-2"></i>
+                                                        <strong>Susunod na hakbang:</strong> Makatanggap kayo ng email confirmation at verification link sa email address na inyong binigay.
+                                                    </div>
+
+                                                    <div class="mt-4">
+                                                        <a href="../../index.html" class="btn btn-primary me-3">
+                                                            <i class="fas fa-home me-2"></i>Back to Home
+                                                        </a>
+                                                        <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                                            <i class="fas fa-plus me-2"></i>Register Another
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                if (validateCurrentStep()) {
+                    // Hide current step
+                    document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+                    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+                    document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('completed');
+                    
+                    // Show next step
+                    currentStep++;
+                    document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+                    document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+                    
+                    // Special handling for final step
+                    if (currentStep === totalSteps) {
+                        submitForm();
+                    }
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                // Hide current step
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+                document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+                
+                // Show previous step
+                currentStep--;
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+                document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+                document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('completed');
+            }
+        }
+
+        function validateCurrentStep() {
+            const currentStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+            const requiredFields = currentStepElement.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            return isValid;
+        }
+
+        function submitForm() {
+            // Simulate form submission
+            console.log('Form submitted successfully!');
+            
+            // Here you would typically send the form data to your server
+            // For now, we'll just show the success message
+        }
+
+        function resetForm() {
+            // Reset form
+            document.getElementById('registrationForm').reset();
+            
+            // Reset steps
+            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active', 'completed');
+            });
+            
+            // Show first step
+            currentStep = 1;
+            document.querySelector(`.form-step[data-step="1"]`).classList.add('active');
+            document.querySelector(`.step[data-step="1"]`).classList.add('active');
+            
+            // Clear file lists
+            document.querySelectorAll('.file-list').forEach(list => list.innerHTML = '');
+        }
+
+        function handleFileUpload(input, listId) {
+            const fileList = document.getElementById(listId);
+            const files = Array.from(input.files);
+            
+            fileList.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <i class="fas fa-file file-icon"></i>
+                        <span class="file-name">${file.name}</span>
+                    </div>
+                    <i class="fas fa-times file-remove" onclick="removeFile('${input.id}', ${index}, '${listId}')"></i>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function removeFile(inputId, fileIndex, listId) {
+            const input = document.getElementById(inputId);
+            const dt = new DataTransfer();
+            const files = Array.from(input.files);
+            
+            files.forEach((file, index) => {
+                if (index !== fileIndex) {
+                    dt.items.add(file);
+                }
+            });
+            
+            input.files = dt.files;
+            handleFileUpload(input, listId);
+        }
+
+        // Drag and drop functionality
+        document.querySelectorAll('.upload-area').forEach(area => {
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('dragover');
+            });
+
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('dragover');
+            });
+
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                
+                const input = area.parentNode.querySelector('.file-input');
+                const listId = input.getAttribute('onchange').match(/'([^']+)'/)[1];
+                
+                input.files = e.dataTransfer.files;
+                handleFileUpload(input, listId);
+            });
+        });
+    </script>
+</body>
+</html>

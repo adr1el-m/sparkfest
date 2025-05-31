@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarangayNav - Transparent Navigation of Barangay Services</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Embedded Styles -->
+    <style>
+        :root {
+            --primary-white: #ffffff;
+            --primary-gold: #f2c500;
+            --primary-red: #a60c0c;
+            --primary-blue: #0040e7;
+            --dark-bg: #060e21;
+            --dark-secondary: #0f1729;
+            --dark-accent: #1a2332;
+            --text-white: #ffffff;
+            --text-light: #e2e8f0;
+            --text-gray: #94a3b8;
+            --text-muted: #64748b;
+            --glass-bg: rgba(15, 23, 41, 0.8);
+            --glass-border: rgba(0, 64, 231, 0.3);
+            --backdrop-blur: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--dark-bg);
+            height: 100vh;
+            overflow: hidden;
+            color: var(--text-white);
+        }
+
+        .text-white { color: var(--text-white) !important; }
+        .text-light { color: var(--text-light) !important; }
+        .text-gray { color: var(--text-gray) !important; }
+        .text-muted { color: var(--text-muted) !important; }
+
+        /* Blue navigation header */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-secondary)) !important;
+            border-bottom: 1px solid rgba(0, 64, 231, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 64, 231, 0.4);
+            padding: 0.8rem 0;
+            min-height: 70px;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--text-white) !important;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            color: var(--primary-gold) !important;
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0 0.8rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 25px;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-gold) !important;
+            background: rgba(242, 197, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-register {
+            background: var(--primary-gold) !important;
+            color: var(--dark-bg) !important;
+            font-weight: 600 !important;
+            border-radius: 25px !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+        }
+
+        .btn-register:hover {
+            background: var(--primary-red) !important;
+            color: var(--text-white) !important;
+            transform: translateY(-2px) scale(1.05) !important;
+            box-shadow: 0 4px 15px rgba(166, 12, 12, 0.5) !important;
+        }
+
+        /* Hero container */
+        .hero-container {
+            height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-secondary) 100%);
+        }
+
+        .hero-content {
+            padding: 2rem 0;
+        }
+
+        .hero-title-compact {
+            color: var(--text-white);
+            font-weight: 900;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 64, 231, 0.3);
+        }
+
+        .hero-subtitle-compact {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .btn-modern-compact {
+            background: linear-gradient(135deg, var(--primary-blue), #0056ff);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-white);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 64, 231, 0.4);
+        }
+
+        .btn-modern-compact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 64, 231, 0.6);
+            color: var(--text-white);
+        }
+
+        .btn-outline-modern-compact {
+            background: transparent;
+            border: 2px solid var(--primary-gold);
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--primary-gold);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-modern-compact:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(242, 197, 0, 0.5);
+        }
+
+        .modern-badge-small {
+            background: var(--glass-bg);
+            border: 1px solid var(--primary-gold);
+            border-radius: 25px;
+            padding: 0.4rem 1rem;
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .modern-badge-small:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+        }
+
+        .services-compact {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 64, 231, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .services-compact h5 {
+            color: var(--text-white);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .services-compact h5::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--primary-gold);
+            border-radius: 2px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .service-item:hover {
+            background: rgba(242, 197, 0, 0.1);
+            border-color: var(--primary-gold);
+            transform: translateX(5px);
+        }
+
+        .service-item i {
+            font-size: 1.3rem;
+            margin-right: 1rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .service-item span {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Floating chatbot */
+        .floating-chatbot {
+            position: fixed !important;
+            bottom: 25px !important;
+            right: 25px !important;
+            z-index: 9999 !important;
+        }
+
+        .chatbot-toggle {
+            width: 65px !important;
+            height: 65px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, var(--primary-blue), #0056ff) !important;
+            border: 3px solid var(--primary-gold) !important;
+            color: var(--text-white) !important;
+            font-size: 1.6rem !important;
+            box-shadow: 0 4px 20px rgba(0, 64, 231, 0.5);
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            position: relative !important;
+            z-index: 10000 !important;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 8px 30px rgba(0, 64, 231, 0.7);
+        }
+
+        .chatbot-window {
+            position: fixed !important;
+            bottom: 105px !important;
+            right: 25px !important;
+            width: 320px !important;
+            height: 450px !important;
+            background: var(--dark-secondary) !important;
+            border: 2px solid var(--primary-blue) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 20px 40px rgba(0, 64, 231, 0.4) !important;
+            display: none !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+            z-index: 9998 !important;
+            animation: slideInUp 0.3s ease-out;
+        }
+
+        .chatbot-window.show {
+            display: flex !important;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutDown {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, var(--primary-blue), #0056ff);
+            color: var(--text-white);
+            padding: 1.2rem;
+            text-align: center;
+            font-weight: 700;
+            border-radius: 18px 18px 0 0;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1.2rem;
+            overflow-y: auto;
+            background: var(--dark-secondary);
+        }
+
+        .chatbot-input {
+            padding: 1.2rem;
+            border-top: 1px solid var(--primary-blue);
+            background: var(--dark-secondary);
+            border-radius: 0 0 18px 18px;
+        }
+
+        .message {
+            margin: 0.8rem 0;
+            padding: 1rem 1.2rem;
+            border-radius: 15px;
+            max-width: 85%;
+            transition: all 0.3s ease;
+        }
+
+        .message:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 64, 231, 0.2);
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--primary-blue), #0056ff);
+            color: var(--text-white);
+            margin-left: auto;
+            text-align: right;
+            box-shadow: 0 2px 10px rgba(0, 64, 231, 0.4);
+        }
+
+        .message.bot {
+            background: var(--glass-bg);
+            color: var(--text-light);
+            border: 1px solid var(--primary-blue);
+            box-shadow: 0 2px 10px rgba(0, 64, 231, 0.2);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.8rem 1rem;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            max-width: 80px;
+            border: 1px solid var(--primary-blue);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { 
+                transform: scale(0); 
+                opacity: 0.5; 
+                background: var(--primary-blue);
+            }
+            40% { 
+                transform: scale(1); 
+                opacity: 1; 
+                background: var(--primary-gold);
+            }
+        }
+
+        /* Input styling for dark theme */
+        .form-control {
+            background: var(--dark-accent) !important;
+            border: 1px solid var(--primary-blue) !important;
+            color: var(--text-light) !important;
+            border-radius: 10px !important;
+        }
+
+        .form-control:focus {
+            background: var(--dark-accent) !important;
+            border-color: var(--primary-gold) !important;
+            color: var(--text-white) !important;
+            box-shadow: 0 0 0 0.2rem rgba(242, 197, 0, 0.25) !important;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), #0056ff) !important;
+            border: none !important;
+            border-radius: 10px !important;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056ff, var(--primary-blue)) !important;
+            transform: scale(1.05) !important;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+            
+            .hero-container {
+                height: auto;
+                min-height: calc(100vh - 70px);
+                padding: 2rem 0;
+            }
+            
+            .hero-title-compact {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle-compact {
+                font-size: 1rem;
+            }
+            
+            .btn-modern-compact,
+            .btn-outline-modern-compact {
+                padding: 0.8rem 2rem;
+                font-size: 0.9rem;
+            }
+            
+            .services-compact {
+                margin-top: 2rem;
+                padding: 1.5rem;
+            }
+            
+            .floating-chatbot {
+                bottom: 20px !important;
+                right: 20px !important;
+            }
+            
+            .chatbot-window {
+                width: 280px !important;
+                height: 380px !important;
+                bottom: 90px !important;
+                right: 20px !important;
+            }
+            
+            .chatbot-toggle {
+                width: 55px !important;
+                height: 55px !important;
+                font-size: 1.3rem !important;
+            }
+        }
+
+        /* Scrollbar styling for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gold);
+        }
+    </style>
+</head>
+<body>
+    <!-- Compact Navigation Header -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-map-marker-alt me-2"></i>BarangayNav
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="#services">Services</a>
+                <a class="nav-link" href="#about">About</a>
+                <a class="nav-link btn-register px-3 py-1 me-2" href="src/auth/register.html">Register as Barangay</a>
+                <a class="nav-link btn-outline-modern px-3 py-1" href="#login">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Full Viewport Hero Section -->
+    <div class="hero-container">
+        <div class="container">
+            <div class="row h-100 align-items-center">
+                <!-- Main Content -->
+                <div class="col-lg-8">
+                    <div class="hero-content">
+                        <h1 class="hero-title-compact">Transparent Barangay Services</h1>
+                        <p class="hero-subtitle-compact mb-4">
+                            Navigate your local government services with AI-powered assistance and real-time tracking for true transparency.
+                        </p>
+                        
+                        <!-- Badges -->
+                        <div class="d-flex gap-2 mb-4 flex-wrap">
+                            <span class="modern-badge-small">SDG 16</span>
+                            <span class="modern-badge-small">AI-Powered</span>
+                            <span class="modern-badge-small">Transparent</span>
+                        </div>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="d-flex gap-3 mb-4">
+                            <button class="btn-modern-compact">
+                                <i class="fas fa-play me-2"></i>Get Started
+                            </button>
+                            <button class="btn-outline-modern-compact">
+                                <i class="fas fa-info-circle me-2"></i>Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Services -->
+                <div class="col-lg-4">
+                    <div class="services-compact">
+                        <h5 class="text-white mb-3">Quick Services</h5>
+                        <div class="service-item">
+                            <i class="fas fa-certificate text-warning me-2"></i>
+                            <span class="text-light">Barangay Clearance - ₱50</span>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-id-card text-info me-2"></i>
+                            <span class="text-light">Barangay ID - ₱30</span>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-store text-success me-2"></i>
+                            <span class="text-light">Business Permit - ₱150+</span>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-file-alt text-danger me-2"></i>
+                            <span class="text-light">File Complaints - Free</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chatbot -->
+    <div class="floating-chatbot">
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comment"></i>
+        </button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <i class="fas fa-robot me-2"></i>BarangayNav AI Assistant
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+            <div class="chatbot-input">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="messageInput" placeholder="Tanungin mo ako tungkol sa mga serbisyo...">
+                    <button class="btn btn-primary" id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chatbot Script - Import from external module -->
+    <script type="module" src="src/chatbot/chatbot.js"></script>
+</body>
+</html> 

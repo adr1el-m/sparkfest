@@ -1,0 +1,106 @@
+<!-- Service Log Header -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h6 class="mb-1">Service History</h6>
+    <small class="text-muted">Track your past requests and their progress</small>
+  </div>
+  <div>
+    <select class="form-select form-select-sm" [(ngModel)]="selectedFilter" (change)="filterServices()">
+      <option value="all">All Services</option>
+      <option value="completed">Completed</option>
+      <option value="pending">Pending</option>
+      <option value="processing">Processing</option>
+    </select>
+  </div>
+</div>
+
+<!-- Service Timeline -->
+<div class="timeline">
+  <div *ngFor="let service of filteredServices; let i = index" class="timeline-item">
+    <div class="timeline-marker" [ngClass]="getMarkerClass(service.status)">
+      <i [class]="getStatusIcon(service.status)"></i>
+    </div>
+    <div class="timeline-content">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <h6 class="mb-1">{{ service.name }}</h6>
+              <small class="text-muted">Request ID: {{ service.requestId }}</small>
+            </div>
+            <span class="badge" [ngClass]="getStatusBadge(service.status)">
+              {{ service.status }}
+            </span>
+          </div>
+          
+          <p class="mb-2 small">{{ service.description }}</p>
+          
+          <!-- Progress Bar -->
+          <div class="progress mb-2" style="height: 6px;">
+            <div 
+              class="progress-bar" 
+              [ngClass]="getProgressBarClass(service.status)"
+              [style.width.%]="getProgress(service.status)">
+            </div>
+          </div>
+          
+          <div class="row small text-muted">
+            <div class="col-6">
+              <i class="fas fa-calendar me-1"></i>
+              {{ service.dateRequested | date:'MMM d, y' }}
+            </div>
+            <div class="col-6 text-end">
+              <i class="fas fa-clock me-1"></i>
+              {{ service.estimatedCompletion | date:'MMM d, y' }}
+            </div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="mt-3 d-flex gap-2" *ngIf="service.status !== 'completed'">
+            <button 
+              class="btn btn-sm btn-outline-primary" 
+              (click)="trackService(service.requestId)">
+              <i class="fas fa-search me-1"></i>Track
+            </button>
+            <button 
+              class="btn btn-sm btn-outline-secondary" 
+              (click)="contactOffice(service.requestId)"
+              *ngIf="service.status === 'processing'">
+              <i class="fas fa-phone me-1"></i>Follow-up
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="filteredServices.length === 0" class="text-center py-5">
+  <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+  <h6 class="text-muted">No services found</h6>
+  <p class="text-muted small">
+    {{ selectedFilter === 'all' ? 'You haven\'t requested any services yet.' : 'No services match the selected filter.' }}
+  </p>
+</div>
+
+<!-- Accountability Footer -->
+<div class="mt-4 p-3 bg-light rounded">
+  <h6 class="mb-2">
+    <i class="fas fa-shield-alt text-success me-2"></i>Transparency & Accountability
+  </h6>
+  <div class="row small">
+    <div class="col-md-4">
+      <strong>Average Processing:</strong> 3.2 days
+    </div>
+    <div class="col-md-4">
+      <strong>Success Rate:</strong> 98.5%
+    </div>
+    <div class="col-md-4">
+      <strong>Satisfaction:</strong> 4.8/5.0
+    </div>
+  </div>
+  <small class="text-muted d-block mt-2">
+    Data updated in real-time • Report issues to maintain transparency
+  </small>
+</div>

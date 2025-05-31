@@ -1,0 +1,103 @@
+<!-- Barangay Information with Glassmorphism -->
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="glass-card animate-on-scroll">
+      <div class="card-body">
+        <h6 class="card-title text-white mb-3">
+          <i class="fas fa-map-marker-alt text-warning me-2"></i>Your Barangay
+        </h6>
+        <h5 class="text-white mb-2">{{ currentBarangay.name }}</h5>
+        <p class="mb-2 text-white-50"><strong class="text-white">Captain:</strong> {{ currentBarangay.captain }}</p>
+        <p class="mb-2 text-white-50"><strong class="text-white">Contact:</strong> {{ currentBarangay.contact }}</p>
+        <p class="mb-0 text-white-50"><strong class="text-white">Office Hours:</strong> {{ currentBarangay.hours }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="glass-card animate-on-scroll">
+      <div class="card-body">
+        <h6 class="card-title text-white mb-3">
+          <i class="fas fa-user text-success me-2"></i>Your Profile
+        </h6>
+        <h5 class="text-white mb-2">{{ userProfile.name }}</h5>
+        <p class="mb-2 text-white-50"><strong class="text-white">Address:</strong> {{ userProfile.address }}</p>
+        <p class="mb-0"><strong class="text-white">Verified:</strong> 
+          <span class="modern-badge bg-success" *ngIf="userProfile.verified">
+            <i class="fas fa-check me-1"></i>Verified
+          </span>
+          <span class="modern-badge bg-warning" *ngIf="!userProfile.verified">
+            <i class="fas fa-clock me-1"></i>Pending
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Service Status Cards with Modern Design -->
+<div class="row mb-4">
+  <div class="col-lg-3 col-md-6 mb-3 animate-on-scroll" *ngFor="let service of services; let i = index" [style.animation-delay.ms]="i * 100">
+    <div class="service-card h-100">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i [class]="service.icon + ' fa-3x service-icon'"></i>
+        </div>
+        <h6 class="card-title text-white mb-2">{{ service.name }}</h6>
+        <p class="card-text small text-white-50 mb-3">{{ service.description }}</p>
+        <div class="mt-auto">
+          <span class="modern-badge" [ngClass]="getStatusBadge(service.status)">
+            <i class="fas fa-circle me-1" style="font-size: 0.6rem;"></i>
+            {{ service.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions with Modern Buttons -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="glass-card animate-on-scroll">
+      <h6 class="mb-4 text-white">
+        <i class="fas fa-bolt text-warning me-2"></i>Quick Actions
+      </h6>
+      <div class="row">
+        <div class="col-md-3 mb-3" *ngFor="let action of quickActions; let i = index">
+          <button 
+            class="btn btn-outline-modern w-100" 
+            (click)="requestService(action.type)"
+            [style.animation-delay.ms]="i * 150">
+            <i [class]="action.icon + ' me-2'"></i>{{ action.name }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Announcements with Glass Effect -->
+<div class="row">
+  <div class="col-12">
+    <div class="glass-card animate-on-scroll">
+      <h6 class="mb-4 text-white">
+        <i class="fas fa-bullhorn text-info me-2"></i>Recent Announcements
+      </h6>
+      <div class="space-y-3">
+        <div class="glass-card p-3 mb-3" *ngFor="let announcement of announcements; let i = index" [style.animation-delay.ms]="i * 100">
+          <div class="d-flex w-100 justify-content-between align-items-start mb-2">
+            <h6 class="mb-1 text-white">{{ announcement.title }}</h6>
+            <small class="text-white-50">{{ announcement.date | date:'MMM d' }}</small>
+          </div>
+          <p class="mb-2 text-white-50 small">{{ announcement.content }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="modern-badge">{{ announcement.category }}</span>
+            <small class="text-white-50">
+              <i class="fas fa-clock me-1"></i>{{ announcement.date | date:'short' }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

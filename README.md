@@ -1,59 +1,201 @@
-# Sparkfest
+# BarangayNav 🏛️
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
+A transparent platform for Barangay services navigation powered by AI assistance and real-time tracking for good governance.
 
-## Development server
+## 🌟 Features
 
-To start a local development server, run:
+- **🤖 AI-Powered Assistance**: Gemini AI chatbot for instant help with barangay services
+- **🔍 Transparent Services**: Clear information about requirements, fees, and processing times
+- **📱 Mobile-Responsive**: Works seamlessly on all devices
+- **🌙 Modern Dark Theme**: Eye-friendly interface with glassmorphism design
+- **⚡ Real-time Support**: 24/7 AI assistance for citizens
+- **🛡️ Secure**: Environment-based configuration for API keys
 
-```bash
-ng serve
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Modern web browser with ES6 module support
+- Internet connection for CDN resources
+- Firebase project (optional, for advanced features)
+- Gemini AI API key
+
+### Setup Instructions
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/barangaynav.git
+   cd barangaynav
+   ```
+
+2. **Configure Environment Variables**
+
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+
+   # Edit .env with your actual API keys
+   # Get Gemini API key from: https://makersuite.google.com/app/apikey
+   # Get Firebase config from: https://console.firebase.google.com
+   ```
+
+3. **Update .env file**
+
+   ```env
+   # Your actual API keys
+   FIREBASE_API_KEY=your_actual_firebase_api_key
+   GEMINI_API_KEY=your_actual_gemini_api_key
+   # ... other variables
+   ```
+
+4. **Serve the application**
+
+   ```bash
+   # Using Python (if installed)
+   python -m http.server 8000
+
+   # Using Node.js http-server
+   npx http-server
+
+   # Or simply open index.html in your browser
+   ```
+
+5. **Access the application**
+   ```
+   http://localhost:8000
+   ```
+
+## 📁 Project Structure
+
+```
+barangaynav/
+├── index.html              # Main landing page
+├── src/
+│   ├── auth/
+│   │   └── register.html   # Barangay registration page
+│   ├── js/
+│   │   └── config.js       # Configuration and API keys
+│   ├── chatbot/
+│   │   └── chatbot.js      # Chatbot implementation
+│   └── index.html          # Angular version (if applicable)
+├── .env                    # Environment variables (create from .env.example)
+├── .env.example            # Environment variables template
+├── .gitignore             # Git ignore file
+└── README.md              # This file
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🔧 Configuration
 
-## Code scaffolding
+### Environment Variables
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The application uses environment variables for secure configuration:
 
-```bash
-ng generate component component-name
-```
+| Variable              | Description              | Required |
+| --------------------- | ------------------------ | -------- |
+| `GEMINI_API_KEY`      | Google Gemini AI API key | Yes      |
+| `FIREBASE_API_KEY`    | Firebase API key         | Optional |
+| `FIREBASE_PROJECT_ID` | Firebase project ID      | Optional |
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Getting API Keys
 
-```bash
-ng generate --help
-```
+1. **Gemini API Key**:
 
-## Building
+   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Create a new API key
+   - Add to your `.env` file
 
-To build the project run:
+2. **Firebase Config** (Optional):
+   - Go to [Firebase Console](https://console.firebase.google.com)
+   - Create a new project or use existing
+   - Get configuration from Project Settings
 
-```bash
-ng build
-```
+## 🎨 Features Overview
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### AI Chatbot
 
-## Running unit tests
+- **Intelligent Responses**: Powered by Google Gemini AI
+- **Local Knowledge Base**: Quick responses for common queries
+- **Bilingual Support**: Tagalog and English
+- **24/7 Availability**: Always ready to help citizens
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Services Supported
 
-```bash
-ng test
-```
+- Barangay Clearance (₱50)
+- Barangay ID (₱30)
+- Business Permits (₱150+)
+- Complaint Filing (Free)
+- Certificate of Indigency (Free)
 
-## Running end-to-end tests
+### Modern UI/UX
 
-For end-to-end (e2e) testing, run:
+- Dark theme with glassmorphism effects
+- Smooth animations and transitions
+- Mobile-first responsive design
+- Accessibility-focused interface
 
-```bash
-ng e2e
-```
+## 🛠️ Development
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Local Development
 
-## Additional Resources
+1. Make sure to set up environment variables
+2. Use a local server (not file:// protocol) for modules to work
+3. Check browser console for any API-related issues
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Adding New Features
+
+- Follow the existing dark theme color scheme
+- Maintain responsive design principles
+- Test chatbot functionality with various queries
+- Update documentation for new environment variables
+
+## 🚀 Deployment
+
+### Before Deployment
+
+1. ✅ Remove all hardcoded API keys
+2. ✅ Add `.env` to `.gitignore`
+3. ✅ Test with production API keys
+4. ✅ Verify all imports work correctly
+
+### Environment Setup
+
+The application automatically loads configuration from `src/js/config.js` which uses environment variables for security.
+
+## 🔒 Security
+
+- **Never commit `.env` files** to version control
+- **Use environment variables** for all sensitive data
+- **Regularly rotate API keys**
+- **Monitor API usage** to detect unauthorized access
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+For support and questions:
+
+- 📧 Email: support@barangaynav.com
+- 📞 Phone: +63 912 345 6789
+- 💬 Use the AI chatbot for instant help
+
+## 🌟 Acknowledgments
+
+- **Google Gemini AI** for intelligent chatbot responses
+- **Firebase** for backend services
+- **Bootstrap** for responsive framework
+- **Font Awesome** for beautiful icons
+
+---
+
+**Built with ❤️ for transparent governance and better citizen services**

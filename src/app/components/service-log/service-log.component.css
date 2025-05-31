@@ -1,0 +1,122 @@
+/* Timeline Styles */
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #e9ecef, #dee2e6);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -25px;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timeline-marker-success {
+  background-color: #198754;
+  color: white;
+}
+
+.timeline-marker-info {
+  background-color: #0dcaf0;
+  color: white;
+}
+
+.timeline-marker-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.timeline-marker-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.timeline-marker-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.timeline-content {
+  margin-left: 10px;
+}
+
+/* Animation for timeline items */
+.timeline-item {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideInLeft 0.5s ease forwards;
+}
+
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Card hover effects */
+.timeline-content .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.timeline-content .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.6s ease;
+}
+
+/* Filter dropdown styling */
+.form-select-sm {
+  font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 20px;
+  }
+  
+  .timeline-marker {
+    left: -15px;
+    width: 15px;
+    height: 15px;
+    font-size: 8px;
+  }
+  
+  .timeline::before {
+    left: 5px;
+  }
+}
